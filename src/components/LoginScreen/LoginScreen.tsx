@@ -2,6 +2,8 @@ import { KeyboardAvoidingView, Text } from 'react-native';
 
 import Checkbox from 'expo-checkbox';
 
+//
+
 import {
   Button,
   ButtonText,
