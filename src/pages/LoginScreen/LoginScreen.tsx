@@ -21,7 +21,7 @@ interface EventProps {
   event: ChangeEventHandler
 }
 
-export function LoginScreen() {
+export function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -58,7 +58,7 @@ export function LoginScreen() {
       <Button onPress={() => handleLogin(email, password)}>
         <ButtonText>Login</ButtonText>
       </Button>
-      <MakeRegisterButton>
+      <MakeRegisterButton onPress={() => navigation.navigate('RegistrationScreen')}>
         <Text>Não tem cadastro?</Text>
       </MakeRegisterButton>
     </Container>
