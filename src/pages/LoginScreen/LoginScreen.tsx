@@ -47,7 +47,7 @@ export function LoginScreen() {
       <MainContainer>
         <Image source={require('../../assets/icon.png')} />
 
-        <Input placeholder="example@mail.com" onChangeText={(value) => handleInputs(value, 'email')} />
+        <Input placeholder="exemplo@email.com" onChangeText={(value) => handleInputs(value, 'email')} />
         <Input placeholder="******" onChangeText={(value) => handleInputs(value, 'password')} />
 
         <CheckboxContainer>
