@@ -4,7 +4,6 @@ export const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  font-family: 'Poppins_400Regular';
 `;
 
 export const Input = styled.TextInput`

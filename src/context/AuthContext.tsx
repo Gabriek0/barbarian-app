@@ -4,6 +4,7 @@ import { api } from '../api/api';
 
 interface AuthContextProps {
     handleLogin: (email: string, password: string) => void,
+    handleRegistration: (name: string, email: string, password: string) => void,
     isLogged: boolean
 }
 
@@ -32,8 +33,20 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
     }
 
+    async function handleRegistration(name: string, email: string, password: string) {
+        const request = await api.post('/signup', { name, email, password })
+
+        const token = request.data.token;
+
+        if (token) {
+            setIsLogged(true);
+            // Guarda o token JWT nessa requisição
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ handleLogin, isLogged }}>
+        <AuthContext.Provider value={{ handleRegistration, handleLogin, isLogged }}>
             {children}
         </AuthContext.Provider>
     )

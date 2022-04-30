@@ -10,6 +10,7 @@ import {
 import { AuthContextProvider, useAuthContext } from './src/context/AuthContext';
 import { HomePage } from './src/pages/HomePage/HomePage';
 import { Text, View } from 'react-native';
+import Routes from './src/routes/Routes';
 
 export default function App() {
   const { isLogged } = useAuthContext();
@@ -27,7 +28,7 @@ export default function App() {
   return (
     <AuthContextProvider>
       <ThemeProvider theme={theme}>
-        <LoginScreen />
+        <Routes />
       </ThemeProvider>
     </AuthContextProvider>
   );
