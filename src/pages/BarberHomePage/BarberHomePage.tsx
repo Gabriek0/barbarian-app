@@ -1,9 +1,49 @@
-import { Text } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
+import { api } from '../../api/api';
+import ScheduleItem from '../../components/ScheduleItem/ScheduleItem';
+
+import { Container } from './styles';
+
+export interface ScheduleIteType {
+  day: number;
+  mounth: number;
+  year: number;
+  from: number;
+  to: number;
+  name: string;
+  whatsapp: string;
+  service: string;
+}
 
 export function BarberHomePage() {
+  const [schedule, setSchedule] = useState<ScheduleIteType[]>([]);
+
+  async function getTodaySchedule() {
+    const todayDate = new Date();
+
+    const day = todayDate.getDay() + 1;
+    const mounth = todayDate.getMonth() + 1;
+    const year = todayDate.getFullYear();
+
+    const response = await api.get(
+      `/schedule?from=00:00&to=24:00&day=${day}&mounth=${mounth}&year=${year}`
+    );
+
+    setSchedule(response.data.scheduleItems);
+  }
+
+  useEffect(() => {
+    getTodaySchedule();
+  }, []);
+
   return (
-    <>
-      <Text>Barber Home Page</Text>
-    </>
+    <Container>
+      <Text>Compromissos de hoje</Text>
+
+      {schedule.map((scheduleItem) => {
+        return <ScheduleItem scheduleItem={scheduleItem} />;
+      })}
+    </Container>
   );
 }
