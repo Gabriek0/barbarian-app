@@ -3,7 +3,7 @@ import { ScrollView, Text, View } from 'react-native';
 import { api } from '../../api/api';
 import ScheduleItem from '../../components/ScheduleItem/ScheduleItem';
 
-import { Container } from './styles';
+import { Container, ScheduleList, Title } from './styles';
 
 export interface ScheduleIteType {
   day: number;
@@ -26,8 +26,11 @@ export function BarberHomePage() {
     const mounth = todayDate.getMonth() + 1;
     const year = todayDate.getFullYear();
 
+    const hour = String(todayDate.getHours()).padStart(2, '0');
+    const minutes = String(todayDate.getMinutes()).padStart(2, '0');
+
     const response = await api.get(
-      `/schedule?from=00:00&to=24:00&day=${day}&mounth=${mounth}&year=${year}`
+      `/schedule?from=${hour}:${minutes}&to=24:00&day=${day}&mounth=${mounth}&year=${year}`
     );
 
     setSchedule(response.data.scheduleItems);
@@ -39,11 +42,19 @@ export function BarberHomePage() {
 
   return (
     <Container>
-      <Text>Compromissos de hoje</Text>
+      <Title>Compromissos de hoje</Title>
+      <ScheduleList>
+        {schedule.map((scheduleItem) => {
+          return <ScheduleItem scheduleItem={scheduleItem} />;
+        })}
+      </ScheduleList>
 
-      {schedule.map((scheduleItem) => {
-        return <ScheduleItem scheduleItem={scheduleItem} />;
-      })}
+      <Title>Proximos compromissos</Title>
+      <ScheduleList>
+        {schedule.map((scheduleItem) => {
+          return <ScheduleItem scheduleItem={scheduleItem} />;
+        })}
+      </ScheduleList>
     </Container>
   );
 }
