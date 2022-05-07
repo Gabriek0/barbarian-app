@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { api } from '../../api/api';
+import NextScheduleItem from '../../components/NextScheduleItem/NextScheduleItem';
 import ScheduleItem from '../../components/ScheduleItem/ScheduleItem';
 
 import { Container, ScheduleList, Title } from './styles';
@@ -18,6 +19,7 @@ export interface ScheduleIteType {
 
 export function BarberHomePage() {
   const [schedule, setSchedule] = useState<ScheduleIteType[]>([]);
+  const [nextSchedule, setNextSchedule] = useState<ScheduleIteType[]>([]);
 
   async function getTodaySchedule() {
     const todayDate = new Date();
@@ -36,8 +38,17 @@ export function BarberHomePage() {
     setSchedule(response.data.scheduleItems);
   }
 
+  async function getNextSchedule() {
+    const response = await api.get('/nextSchedule');
+
+    console.log(response);
+
+    setNextSchedule(response.data.scheduleItems);
+  }
+
   useEffect(() => {
     getTodaySchedule();
+    getNextSchedule();
   }, []);
 
   return (
@@ -51,8 +62,8 @@ export function BarberHomePage() {
 
       <Title>Proximos compromissos</Title>
       <ScheduleList>
-        {schedule.map((scheduleItem) => {
-          return <ScheduleItem scheduleItem={scheduleItem} />;
+        {nextSchedule.map((scheduleItem) => {
+          return <NextScheduleItem scheduleItem={scheduleItem} />;
         })}
       </ScheduleList>
     </Container>
