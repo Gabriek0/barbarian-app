@@ -6,7 +6,7 @@ import ScheduleItem from '../../components/ScheduleItem/ScheduleItem';
 
 import { Container, ScheduleList, Title } from './styles';
 
-export interface ScheduleIteType {
+export interface ScheduleItemType {
   day: number;
   mounth: number;
   year: number;
@@ -18,8 +18,8 @@ export interface ScheduleIteType {
 }
 
 export function BarberHomePage() {
-  const [schedule, setSchedule] = useState<ScheduleIteType[]>([]);
-  const [nextSchedule, setNextSchedule] = useState<ScheduleIteType[]>([]);
+  const [schedule, setSchedule] = useState<ScheduleItemType[]>([]);
+  const [nextSchedule, setNextSchedule] = useState<ScheduleItemType[]>([]);
 
   async function getTodaySchedule() {
     const todayDate = new Date();
@@ -40,8 +40,6 @@ export function BarberHomePage() {
 
   async function getNextSchedule() {
     const response = await api.get('/nextSchedule');
-
-    console.log(response);
 
     setNextSchedule(response.data.scheduleItems);
   }

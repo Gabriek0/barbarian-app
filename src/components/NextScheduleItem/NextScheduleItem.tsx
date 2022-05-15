@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { ScheduleIteType } from '../../pages/BarberHomePage/BarberHomePage';
+import { ScheduleItemType } from '../../pages/BarberHomePage/BarberHomePage';
 import {
   ClientAndServiceContainer,
   ClientNameText,
@@ -12,7 +12,7 @@ import {
 export default function NextScheduleItem({
   scheduleItem,
 }: {
-  scheduleItem: ScheduleIteType;
+  scheduleItem: ScheduleItemType;
 }) {
   return (
     <Container>
