@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import { api } from '../../api/api';
 import NextScheduleItem from '../../components/NextScheduleItem/NextScheduleItem';
 import ScheduleItem from '../../components/ScheduleItem/ScheduleItem';
@@ -7,6 +7,7 @@ import ScheduleItem from '../../components/ScheduleItem/ScheduleItem';
 import { Container, ScheduleList, Title } from './styles';
 
 export interface ScheduleItemType {
+  id: number;
   day: number;
   mounth: number;
   year: number;
@@ -24,7 +25,7 @@ export function BarberHomePage() {
   async function getTodaySchedule() {
     const todayDate = new Date();
 
-    const day = todayDate.getDay() + 1;
+    const day = todayDate.getDate();
     const mounth = todayDate.getMonth() + 1;
     const year = todayDate.getFullYear();
 
@@ -44,6 +45,11 @@ export function BarberHomePage() {
     setNextSchedule(response.data.scheduleItems);
   }
 
+  async function refreshSchedule() {
+    getTodaySchedule();
+    getNextSchedule();
+  }
+
   useEffect(() => {
     getTodaySchedule();
     getNextSchedule();
@@ -52,16 +58,19 @@ export function BarberHomePage() {
   return (
     <Container>
       <Title>Compromissos de hoje</Title>
+      <TouchableOpacity onPress={refreshSchedule}>
+        <Text>Refresh</Text>
+      </TouchableOpacity>
       <ScheduleList>
-        {schedule.map((scheduleItem) => {
-          return <ScheduleItem scheduleItem={scheduleItem} />;
+        {schedule.map((scheduleItem, index) => {
+          return <ScheduleItem key={index} scheduleItem={scheduleItem} />;
         })}
       </ScheduleList>
 
       <Title>Proximos compromissos</Title>
       <ScheduleList>
-        {nextSchedule.map((scheduleItem) => {
-          return <NextScheduleItem scheduleItem={scheduleItem} />;
+        {nextSchedule.map((scheduleItem, index) => {
+          return <NextScheduleItem key={index} scheduleItem={scheduleItem} />;
         })}
       </ScheduleList>
     </Container>
