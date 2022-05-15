@@ -10,6 +10,7 @@ export const Container = styled.View`
 export const ScheduleList = styled.ScrollView`
   margin-bottom: 20px;
   width: 90%;
+  height: 50%;
 `;
 
 export const Title = styled.Text`
