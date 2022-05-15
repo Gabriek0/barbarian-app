@@ -14,12 +14,8 @@ import {
   MainContainer,
 } from './styles';
 
-import { ChangeEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
-
-interface EventProps {
-  event: ChangeEventHandler;
-}
 
 export function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('');

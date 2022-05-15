@@ -1,22 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import { api } from '../../api/api';
+import HomePageHeader from '../../components/HomePageHeader/HomePageHeader';
 import NextScheduleItem from '../../components/NextScheduleItem/NextScheduleItem';
 import ScheduleItem from '../../components/ScheduleItem/ScheduleItem';
+import { ScheduleItemType } from '../../dto/ScheduleItemType.dto';
 
 import { Container, ScheduleList, Title } from './styles';
-
-export interface ScheduleItemType {
-  id: number;
-  day: number;
-  mounth: number;
-  year: number;
-  from: number;
-  to: number;
-  name: string;
-  whatsapp: string;
-  service: string;
-}
 
 export function BarberHomePage() {
   const [schedule, setSchedule] = useState<ScheduleItemType[]>([]);
@@ -57,10 +47,10 @@ export function BarberHomePage() {
 
   return (
     <Container>
-      <Title>Compromissos de hoje</Title>
-      <TouchableOpacity onPress={refreshSchedule}>
-        <Text>Refresh</Text>
-      </TouchableOpacity>
+      <HomePageHeader
+        title="Compromissos de hoje"
+        refreshFunction={refreshSchedule}
+      />
       <ScheduleList>
         {schedule.map((scheduleItem, index) => {
           return <ScheduleItem key={index} scheduleItem={scheduleItem} />;

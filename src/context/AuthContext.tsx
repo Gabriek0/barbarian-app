@@ -3,12 +3,20 @@ import { useNavigation } from '@react-navigation/native';
 
 import { api } from '../api/api';
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  whatsapp: string;
+}
+
 interface AuthContextProps {
   handleLogin: (email: string, password: string, isBarber: boolean) => void;
   handleRegistration: (name: string, email: string, password: string) => void;
   isLogged: boolean;
   isLoading: boolean;
   errorMessage: string;
+  loggedUser: User;
 }
 
 interface AuthContextProviderProps {
@@ -21,6 +29,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [isLogged, setIsLogged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loggedUser, setLoggedUser] = useState<User>({} as User);
 
   const navigation = useNavigation();
 
@@ -47,6 +56,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       const token = request.data.token;
 
       if (token) {
+        setLoggedUser(request.data.user);
         setIsLogged(true);
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         setIsLoading(false);
@@ -90,6 +100,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         isLogged,
         isLoading,
         errorMessage,
+        loggedUser,
       }}
     >
       {children}

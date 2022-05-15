@@ -18,9 +18,15 @@ export const ScheduleDateContianer = styled.View`
 `;
 
 export const ClientNameText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
   font-size: 20px;
 `;
 
 export const ServiceTypeText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
   font-size: 10px;
+`;
+
+export const DateText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
 `;

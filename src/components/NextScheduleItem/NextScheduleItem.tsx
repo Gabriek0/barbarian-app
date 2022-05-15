@@ -1,10 +1,11 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { ScheduleItemType } from '../../pages/BarberHomePage/BarberHomePage';
+import { ScheduleItemType } from '../../dto/ScheduleItemType.dto';
 import {
   ClientAndServiceContainer,
   ClientNameText,
   Container,
+  DateText,
   ScheduleDateContianer,
   ServiceTypeText,
 } from './styles';
@@ -21,9 +22,9 @@ export default function NextScheduleItem({
         <ServiceTypeText>{scheduleItem.service}</ServiceTypeText>
       </ClientAndServiceContainer>
       <ScheduleDateContianer>
-        <Text>
+        <DateText>
           Data: {scheduleItem.day}/{scheduleItem.mounth}/{scheduleItem.year}
-        </Text>
+        </DateText>
       </ScheduleDateContianer>
 
       {scheduleItem.whatsapp.length > 1 && <Text>{scheduleItem.whatsapp}</Text>}

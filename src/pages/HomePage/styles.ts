@@ -17,5 +17,20 @@ export const Title = styled.Text`
   width: 100%;
   text-align: left;
   padding: 0px 20px;
+`;
+
+export const CreateScheduleButton = styled.TouchableOpacity`
+  width: 90%;
+  height: 50px;
+  margin: 10px;
+  background-color: ${({ theme }) => theme.colors.gray30};
+
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+`;
+
+export const CreateScheduleText = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: 20px;
 `;
