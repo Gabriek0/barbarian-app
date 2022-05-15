@@ -1,57 +1,102 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 import { api } from '../api/api';
 
 interface AuthContextProps {
-    handleLogin: (email: string, password: string) => void,
-    handleRegistration: (name: string, email: string, password: string) => void,
-    isLogged: boolean
+  handleLogin: (email: string, password: string, isBarber: boolean) => void;
+  handleRegistration: (name: string, email: string, password: string) => void;
+  isLogged: boolean;
+  isLoading: boolean;
+  errorMessage: string;
 }
 
 interface AuthContextProviderProps {
-    children: ReactNode
+  children: ReactNode;
 }
-
 
 const AuthContext = createContext({} as AuthContextProps);
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
-    const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-    async function handleLogin(email: string, password: string) {
-        console.log({ email, password })
+  const navigation = useNavigation();
 
-        const request = await api.post('/login', { email, password })
+  async function handleLogin(
+    email: string,
+    password: string,
+    isBarber: boolean
+  ) {
+    setErrorMessage('');
 
-        const token = request.data.token;
+    console.log('try login with', { email, password, isBarber });
 
-        if (token) {
-            setIsLogged(true);
-            // Guarda o token JWT nessa requisição
-            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        }
-
+    if (isBarber && email !== 'neto.daniribeiro@gmail.com') {
+      setErrorMessage('opsss... você não é barbeiro');
+      setIsLoading(false);
+      return;
     }
 
-    async function handleRegistration(name: string, email: string, password: string) {
-        const request = await api.post('/signup', { name, email, password })
+    setIsLoading(true);
 
-        const token = request.data.token;
+    try {
+      const request = await api.post('/login', { email, password });
 
-        if (token) {
-            setIsLogged(true);
-            // Guarda o token JWT nessa requisição
-            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      const token = request.data.token;
+
+      if (token) {
+        setIsLogged(true);
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        setIsLoading(false);
+
+        if (isBarber) {
+          navigation.navigate('barberhomepage');
+        } else {
+          navigation.navigate('homepage');
         }
-    }
+      }
 
-    return (
-        <AuthContext.Provider value={{ handleRegistration, handleLogin, isLogged }}>
-            {children}
-        </AuthContext.Provider>
-    )
+      setIsLoading(false);
+      return null;
+    } catch (error) {
+      console.log(error);
+
+      setErrorMessage('eita, algo de errado aconteceu :(');
+    }
+  }
+
+  async function handleRegistration(
+    name: string,
+    email: string,
+    password: string
+  ) {
+    const request = await api.post('/signup', { name, email, password });
+
+    const token = request.data.token;
+
+    if (token) {
+      setIsLogged(true);
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  }
+
+  return (
+    <AuthContext.Provider
+      value={{
+        handleRegistration,
+        handleLogin,
+        isLogged,
+        isLoading,
+        errorMessage,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuthContext() {
-    return useContext(AuthContext);
+  return useContext(AuthContext);
 }
