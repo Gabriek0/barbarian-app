@@ -12,7 +12,6 @@ import {
   CreateScheduleButton,
   CreateScheduleText,
   ScheduleList,
-  Title,
 } from './styles';
 
 export function HomePage({ navigation }: any) {
