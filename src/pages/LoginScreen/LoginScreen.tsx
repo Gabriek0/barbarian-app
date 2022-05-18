@@ -16,6 +16,7 @@ import {
 
 import { useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
+import Loading from '../../components/Loading/Loading';
 
 export function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
@@ -73,7 +74,7 @@ export function LoginScreen({ navigation }: any) {
         </CheckboxContainer>
       </MainContainer>
       <Button onPress={() => handleLogin(email, password, isBarber)}>
-        <ButtonText>{isLoading ? 'loading' : 'login'}</ButtonText>
+        <ButtonText>{isLoading ? <Loading /> : 'login'}</ButtonText>
       </Button>
       <MakeRegisterButton
         onPress={() => navigation.navigate('RegistrationScreen')}

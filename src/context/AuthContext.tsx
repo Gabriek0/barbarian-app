@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { api } from '../api/api';
@@ -33,14 +39,18 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const navigation = useNavigation();
 
+  useEffect(() => {
+    if (isLogged) {
+      navigation.navigate('homepage');
+    }
+  }, [isLogged]);
+
   async function handleLogin(
     email: string,
     password: string,
     isBarber: boolean
   ) {
     setErrorMessage('');
-
-    console.log('try login with', { email, password, isBarber });
 
     if (isBarber && email !== 'neto.daniribeiro@gmail.com') {
       setErrorMessage('opsss... você não é barbeiro');
@@ -82,6 +92,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     email: string,
     password: string
   ) {
+    setIsLoading(true);
+
     const request = await api.post('/signup', { name, email, password });
 
     const token = request.data.token;
@@ -90,6 +102,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       setIsLogged(true);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
+
+    setIsLoading(false);
   }
 
   return (
