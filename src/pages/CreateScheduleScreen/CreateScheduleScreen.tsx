@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-community/picker';
+import RNPickerSelect from 'react-native-picker-select';
 
 import {
   ButtonText,
@@ -9,7 +9,11 @@ import {
   Input,
   InputContainer,
   InputLabel,
+  InputPicker,
+  pickerSelectStyles,
 } from './styles';
+
+import { CreateScheduleButton, CreateScheduleText } from '../HomePage/styles';
 
 export default function CreateScheduleScreen() {
   const [date, setDate] = useState(new Date());
@@ -20,6 +24,8 @@ export default function CreateScheduleScreen() {
   const [inputHour, setInputHour] = useState('');
   const [showHour, setShowHour] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState();
+
+  const [selectedService, setSelectedService] = useState("");
 
   const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -49,6 +55,12 @@ export default function CreateScheduleScreen() {
     return num.toString().padStart(2, '0');
   };
 
+  const placeholder = {
+    label: "Selecione um serviço...",
+    value: null,
+    color: "#000000"
+  };
+
   useEffect(() => {
     if (date) {
       setInputDate(
@@ -74,7 +86,7 @@ export default function CreateScheduleScreen() {
     <Container>
       <InputLabel>DIA</InputLabel>
       <InputContainer>
-        <Input placeholder="dd/mm/yyyy" value={inputDate} />
+        <Input editable={false} placeholder="dd/mm/yyyy" value={inputDate} />
         <CalendarButton onPress={() => handleShowDatePicker("date")}>
           <ButtonText>EDITAR</ButtonText>
         </CalendarButton>
@@ -90,7 +102,7 @@ export default function CreateScheduleScreen() {
       )}
       <InputLabel>HORÁRIO</InputLabel>
       <InputContainer>
-        <Input placeholder="hh/mm" value={inputHour} />
+        <Input editable={false} placeholder="hh/mm" value={inputHour} />
         <CalendarButton onPress={() => handleShowDatePicker("hour")}>
           <ButtonText>EDITAR</ButtonText>
         </CalendarButton>
@@ -104,6 +116,23 @@ export default function CreateScheduleScreen() {
           onChange={onChangeHour}
         />
       )}
+      <InputPicker>SERVIÇO</InputPicker>
+      <RNPickerSelect
+        placeholder={placeholder}
+        onValueChange={(event: any) => setSelectedService(event)}
+        value={selectedService}
+        style={pickerSelectStyles}
+        items={[
+          { label: 'Football', value: 'Football' },
+          { label: 'Football', value: 'Football' },
+          { label: 'Football', value: 'Football' },
+          { label: 'Football', value: 'Football' },
+        ]}
+      />
+
+      <CreateScheduleButton>
+        <CreateScheduleText>Confirmar agendamento</CreateScheduleText>
+      </CreateScheduleButton>
     </Container>
   );
 }
