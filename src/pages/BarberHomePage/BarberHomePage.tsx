@@ -1,21 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import { api } from '../../api/api';
+import HomePageHeader from '../../components/HomePageHeader/HomePageHeader';
 import NextScheduleItem from '../../components/NextScheduleItem/NextScheduleItem';
 import ScheduleItem from '../../components/ScheduleItem/ScheduleItem';
+import { ScheduleItemType } from '../../dto/ScheduleItemType.dto';
 
 import { Container, ScheduleList, Title } from './styles';
-
-export interface ScheduleItemType {
-  day: number;
-  mounth: number;
-  year: number;
-  from: number;
-  to: number;
-  name: string;
-  whatsapp: string;
-  service: string;
-}
 
 export function BarberHomePage() {
   const [schedule, setSchedule] = useState<ScheduleItemType[]>([]);
@@ -24,7 +15,7 @@ export function BarberHomePage() {
   async function getTodaySchedule() {
     const todayDate = new Date();
 
-    const day = todayDate.getDay() + 1;
+    const day = todayDate.getDate();
     const mounth = todayDate.getMonth() + 1;
     const year = todayDate.getFullYear();
 
@@ -44,6 +35,11 @@ export function BarberHomePage() {
     setNextSchedule(response.data.scheduleItems);
   }
 
+  async function refreshSchedule() {
+    getTodaySchedule();
+    getNextSchedule();
+  }
+
   useEffect(() => {
     getTodaySchedule();
     getNextSchedule();
@@ -51,17 +47,20 @@ export function BarberHomePage() {
 
   return (
     <Container>
-      <Title>Compromissos de hoje</Title>
+      <HomePageHeader
+        title="Compromissos de hoje"
+        refreshFunction={refreshSchedule}
+      />
       <ScheduleList>
-        {schedule.map((scheduleItem) => {
-          return <ScheduleItem scheduleItem={scheduleItem} />;
+        {schedule.map((scheduleItem, index) => {
+          return <ScheduleItem key={index} scheduleItem={scheduleItem} />;
         })}
       </ScheduleList>
 
       <Title>Proximos compromissos</Title>
       <ScheduleList>
-        {nextSchedule.map((scheduleItem) => {
-          return <NextScheduleItem scheduleItem={scheduleItem} />;
+        {nextSchedule.map((scheduleItem, index) => {
+          return <NextScheduleItem key={index} scheduleItem={scheduleItem} />;
         })}
       </ScheduleList>
     </Container>

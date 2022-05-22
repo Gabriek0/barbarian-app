@@ -9,6 +9,7 @@ import { BarberHomePage } from '../pages/BarberHomePage/BarberHomePage';
 import { AuthContextProvider } from '../context/AuthContext';
 import { ThemeProvider } from 'styled-components';
 import theme from '../global/theme';
+import CreateScheduleScreen from '../pages/CreateScheduleScreen/CreateScheduleScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,11 @@ export default function Routes() {
               options={{ headerShown: false }}
               name="barberhomepage"
               component={BarberHomePage}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="createScheduleScreen"
+              component={CreateScheduleScreen}
             />
           </Stack.Navigator>
         </ThemeProvider>

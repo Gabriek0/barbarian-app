@@ -1,10 +1,11 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { ScheduleItemType } from '../../pages/BarberHomePage/BarberHomePage';
+import { Text } from 'react-native';
+import { ScheduleItemType } from '../../dto/ScheduleItemType.dto';
 import {
   ClientAndServiceContainer,
   ClientNameText,
   Container,
+  DateText,
   ScheduleHoursContainer,
   ScheduleHoursItemContainer,
   ServiceTypeText,
@@ -33,11 +34,11 @@ export default function ScheduleItem({
       <ScheduleHoursContainer>
         <ScheduleHoursItemContainer>
           <Text>Das:</Text>
-          <Text>{convertToHour(scheduleItem.from)}</Text>
+          <DateText>{convertToHour(scheduleItem.from)}</DateText>
         </ScheduleHoursItemContainer>
         <ScheduleHoursItemContainer>
           <Text>Até:</Text>
-          <Text>{convertToHour(scheduleItem.to)}</Text>
+          <DateText>{convertToHour(scheduleItem.to)}</DateText>
         </ScheduleHoursItemContainer>
       </ScheduleHoursContainer>
 

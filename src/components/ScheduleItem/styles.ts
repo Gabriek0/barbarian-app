@@ -25,9 +25,15 @@ export const ScheduleHoursItemContainer = styled.View`
 `;
 
 export const ClientNameText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
   font-size: 20px;
 `;
 
+export const DateText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
+`;
+
 export const ServiceTypeText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
   font-size: 10px;
 `;

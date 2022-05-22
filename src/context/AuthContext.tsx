@@ -1,7 +1,20 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { api } from '../api/api';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  whatsapp: string;
+}
 
 interface AuthContextProps {
   handleLogin: (email: string, password: string, isBarber: boolean) => void;
@@ -9,6 +22,7 @@ interface AuthContextProps {
   isLogged: boolean;
   isLoading: boolean;
   errorMessage: string;
+  loggedUser: User;
 }
 
 interface AuthContextProviderProps {
@@ -21,8 +35,15 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [isLogged, setIsLogged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loggedUser, setLoggedUser] = useState<User>({} as User);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (isLogged) {
+      navigation.navigate('homepage');
+    }
+  }, [isLogged]);
 
   async function handleLogin(
     email: string,
@@ -30,8 +51,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     isBarber: boolean
   ) {
     setErrorMessage('');
-
-    console.log('try login with', { email, password, isBarber });
 
     if (isBarber && email !== 'neto.daniribeiro@gmail.com') {
       setErrorMessage('opsss... você não é barbeiro');
@@ -47,6 +66,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       const token = request.data.token;
 
       if (token) {
+        setLoggedUser(request.data.user);
         setIsLogged(true);
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         setIsLoading(false);
@@ -72,6 +92,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     email: string,
     password: string
   ) {
+    setIsLoading(true);
+
     const request = await api.post('/signup', { name, email, password });
 
     const token = request.data.token;
@@ -80,6 +102,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       setIsLogged(true);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
+
+    setIsLoading(false);
   }
 
   return (
@@ -90,6 +114,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         isLogged,
         isLoading,
         errorMessage,
+        loggedUser,
       }}
     >
       {children}

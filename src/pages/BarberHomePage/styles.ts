@@ -17,4 +17,5 @@ export const Title = styled.Text`
   width: 100%;
   text-align: left;
   padding: 0px 20px;
+  font-family: ${({ theme }) => theme.fonts.regular};
 `;
