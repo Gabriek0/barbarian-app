@@ -34,3 +34,9 @@ export const CreateScheduleText = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
   font-size: 20px;
 `;
+
+export const Message = styled.View`
+  align-items: center;
+  justify-content: center;
+  height: 550px;
+`;

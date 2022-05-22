@@ -11,6 +11,7 @@ import {
   Container,
   CreateScheduleButton,
   CreateScheduleText,
+  Message,
   ScheduleList,
 } from './styles';
 
@@ -57,10 +58,10 @@ export function HomePage({ navigation }: any) {
           })}
 
         {schedule.length === 0 && (
-          <View>
+          <Message>
             <Text>Eita, :( </Text>
             <Text>parece que você não tem compromissos hoje</Text>
-          </View>
+          </Message>
         )}
       </ScheduleList>
 

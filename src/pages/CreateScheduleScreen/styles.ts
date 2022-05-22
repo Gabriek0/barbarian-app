@@ -2,32 +2,47 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
   flex: 1;
-  justify-content: center;
   margin: 0 20px;
+  padding-top: 200px;
 `;
 
 export const InputContainer = styled.View`
   flex-direction: row;
   width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 `;
 
 export const Input = styled.TextInput`
   background-color: ${({ theme }) => theme.colors.gray30};
   padding: 15px 21px;
-  width: 80%;
+  width: 50%;
   height: 59px;
   border-radius: 8px;
   font-family: ${({ theme }) => theme.fonts.regular};
+  margin-right: 10px;
 `;
 
 export const InputLabel = styled.Text`
-  text-align: left;
   font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: 18px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  text-align: left;
+  padding-left: 50px;
 `;
 
 export const CalendarButton = styled.TouchableOpacity`
-  background-color: blue;
-  width: 50px;
-  height: 50px;
+  background-color: ${props => props.theme.colors.black};
+  width: 80px;
+  height: 80%;
   margin: 5px;
+  border-radius: 8px;
+`;
+
+export const ButtonText = styled.Text`
+  color: ${props => props.theme.colors.white};
+  text-align: center;
+  margin-top: 13px;
 `;

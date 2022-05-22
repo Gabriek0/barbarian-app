@@ -3,28 +3,46 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-community/picker';
 
 import {
+  ButtonText,
   CalendarButton,
   Container,
   Input,
   InputContainer,
   InputLabel,
 } from './styles';
-import { View } from 'react-native';
 
 export default function CreateScheduleScreen() {
   const [date, setDate] = useState(new Date());
   const [inputDate, setInputDate] = useState('');
-  const [show, setShow] = useState(false);
+  const [showDate, setShowDate] = useState(false);
+
+  const [hour, setHour] = useState(new Date());
+  const [inputHour, setInputHour] = useState('');
+  const [showHour, setShowHour] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState();
 
-  const onChange = (event: any, selectedDate: any) => {
+  const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
-    setShow(false);
+    setShowDate(false);
     setDate(currentDate);
   };
 
-  const handleShowDatePicker = () => {
-    setShow(true);
+  const onChangeHour = (event: any, selectedHour: any) => {
+    const currentHour = selectedHour;
+    setShowHour(false);
+    setHour(currentHour);
+  };
+
+  const handleShowDatePicker = (type: string) => {
+    if (type === "hour") {
+      setShowHour(true);
+      setShowDate(false);
+    };
+
+    if (type === "date") {
+      setShowHour(false)
+      setShowDate(true);
+    };
   };
 
   const padTo2Digits = (num: number) => {
@@ -41,21 +59,49 @@ export default function CreateScheduleScreen() {
         ].join('/')
       );
     }
-  }, [date]);
+
+    if (hour) {
+      setInputHour([
+        padTo2Digits(hour.getHours()),
+        padTo2Digits(hour.getMinutes())
+      ].join(':')
+      );
+    };
+
+  }, [date, hour]);
 
   return (
     <Container>
-      <InputLabel>Dia</InputLabel>
+      <InputLabel>DIA</InputLabel>
       <InputContainer>
         <Input placeholder="dd/mm/yyyy" value={inputDate} />
-        <CalendarButton onPress={handleShowDatePicker}></CalendarButton>
+        <CalendarButton onPress={() => handleShowDatePicker("date")}>
+          <ButtonText>EDITAR</ButtonText>
+        </CalendarButton>
       </InputContainer>
-      {show && (
+      {showDate && (
         <DateTimePicker
+          mode="date"
           testID="dateTimePicker"
           value={date}
           is24Hour={true}
-          onChange={onChange}
+          onChange={onChangeDate}
+        />
+      )}
+      <InputLabel>HORÁRIO</InputLabel>
+      <InputContainer>
+        <Input placeholder="hh/mm" value={inputHour} />
+        <CalendarButton onPress={() => handleShowDatePicker("hour")}>
+          <ButtonText>EDITAR</ButtonText>
+        </CalendarButton>
+      </InputContainer>
+      {showHour && (
+        <DateTimePicker
+          mode="time"
+          testID="dateTimeHourPicker"
+          value={hour}
+          is24Hour={true}
+          onChange={onChangeHour}
         />
       )}
     </Container>
