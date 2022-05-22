@@ -59,17 +59,8 @@ export const ButtonText = styled.Text`
   margin-top: 13px;
 `;
 
-export const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    marginLeft: 40,
-    marginRight: 50,
-    borderColor: "black",
-    borderWidth: 2,
-    borderStyle: "solid",
-    alignItems: "center"
-  },
-  inputAndroid: {
+export const styles = StyleSheet.create({
+  picker: {
     fontSize: 16,
     marginLeft: 40,
     marginRight: 50,
@@ -78,6 +69,5 @@ export const pickerSelectStyles = StyleSheet.create({
     borderWidth: 2,
     borderStyle: "solid",
     alignItems: "center",
-
-  }
+  },
 });

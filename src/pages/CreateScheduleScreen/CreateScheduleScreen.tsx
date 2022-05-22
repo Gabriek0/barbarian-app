@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import RNPickerSelect from 'react-native-picker-select';
+import { Picker } from "@react-native-picker/picker";
 
 import {
   ButtonText,
@@ -10,12 +10,19 @@ import {
   InputContainer,
   InputLabel,
   InputPicker,
-  pickerSelectStyles,
+  styles,
 } from './styles';
 
 import { CreateScheduleButton, CreateScheduleText } from '../HomePage/styles';
+import { api } from '../../api/api';
+import { useAuthContext } from '../../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function CreateScheduleScreen() {
+  const { loggedUser } = useAuthContext();
+  const navigation = useNavigation();
+
   const [date, setDate] = useState(new Date());
   const [inputDate, setInputDate] = useState('');
   const [showDate, setShowDate] = useState(false);
@@ -25,7 +32,7 @@ export default function CreateScheduleScreen() {
   const [showHour, setShowHour] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState();
 
-  const [selectedService, setSelectedService] = useState("");
+  const [service, setService] = useState("");
 
   const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -55,11 +62,12 @@ export default function CreateScheduleScreen() {
     return num.toString().padStart(2, '0');
   };
 
-  const placeholder = {
-    label: "Selecione um serviço...",
-    value: null,
-    color: "#000000"
-  };
+  const formattedHour = (hour: Date) => {
+    return [
+      padTo2Digits(hour.getHours()),
+      padTo2Digits(hour.getMinutes())
+    ].join(':')
+  }
 
   useEffect(() => {
     if (date) {
@@ -73,20 +81,52 @@ export default function CreateScheduleScreen() {
     }
 
     if (hour) {
-      setInputHour([
-        padTo2Digits(hour.getHours()),
-        padTo2Digits(hour.getMinutes())
-      ].join(':')
-      );
+      setInputHour(formattedHour(hour));
     };
 
   }, [date, hour]);
+
+
+  const handleSubmitSchedule = async () => {
+    const toHour = hour.getHours() + 1;
+    const toMinutes = hour.getMinutes();
+
+    try {
+      console.log({
+        from: formattedHour(hour),
+        to: `${padTo2Digits(toHour)}:${padTo2Digits(toMinutes)}}`,
+        day: padTo2Digits(date.getDate()),
+        mounth: padTo2Digits(date.getMonth() + 1),
+        year: date.getFullYear(),
+        service_id: 1,
+        user_id: loggedUser.id
+      });
+
+      await api.post("/schedule", {
+        from: formattedHour(hour),
+        to: `${padTo2Digits(toHour)}:${padTo2Digits(toMinutes)}`,
+        day: padTo2Digits(date.getDate()),
+        mounth: padTo2Digits(date.getMonth() + 1),
+        year: date.getFullYear(),
+        service_id: 1,
+        user_id: loggedUser.id
+      });
+
+      setInputDate("");
+      setInputHour("");
+
+      navigation.navigate("homepage");
+
+    } catch (err: any) {
+      console.log(err.message);
+    }
+  };
 
   return (
     <Container>
       <InputLabel>DIA</InputLabel>
       <InputContainer>
-        <Input editable={false} placeholder="dd/mm/yyyy" value={inputDate} />
+        <Input placeholder="dd/mm/yyyy" value={inputDate} />
         <CalendarButton onPress={() => handleShowDatePicker("date")}>
           <ButtonText>EDITAR</ButtonText>
         </CalendarButton>
@@ -102,7 +142,7 @@ export default function CreateScheduleScreen() {
       )}
       <InputLabel>HORÁRIO</InputLabel>
       <InputContainer>
-        <Input editable={false} placeholder="hh/mm" value={inputHour} />
+        <Input placeholder="hh/mm" value={inputHour} />
         <CalendarButton onPress={() => handleShowDatePicker("hour")}>
           <ButtonText>EDITAR</ButtonText>
         </CalendarButton>
@@ -117,20 +157,17 @@ export default function CreateScheduleScreen() {
         />
       )}
       <InputPicker>SERVIÇO</InputPicker>
-      <RNPickerSelect
-        placeholder={placeholder}
-        onValueChange={(event: any) => setSelectedService(event)}
-        value={selectedService}
-        style={pickerSelectStyles}
-        items={[
-          { label: 'Football', value: 'Football' },
-          { label: 'Football', value: 'Football' },
-          { label: 'Football', value: 'Football' },
-          { label: 'Football', value: 'Football' },
-        ]}
-      />
+      <Picker
+        selectedValue={service}
+        onValueChange={(value) => setService(value)}
+        mode="dropdown"
+        style={styles.picker}
+      >
+        <Picker.Item label="Barba" value="Barba" />
 
-      <CreateScheduleButton>
+      </Picker>
+
+      <CreateScheduleButton onPress={handleSubmitSchedule}>
         <CreateScheduleText>Confirmar agendamento</CreateScheduleText>
       </CreateScheduleButton>
     </Container>
